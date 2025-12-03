@@ -1,4 +1,5 @@
 import React from 'react';
+import CreateListing from "./pages/CreateListing";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import ListingCard from './components/ListingCard';
@@ -18,6 +19,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/browse" element={<Browse />} />
+	  <Route path="/create-listing" element={<CreateListing />} />
           <Route path="/mylistings" element={<MyListings />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

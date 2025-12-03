@@ -11,6 +11,7 @@ export default function Navbar() {
       <div className="nav-links">
         <Link to="/browse">Browse</Link>
         {currentUser && <Link to="/mylistings">My Listings</Link>}
+	{currentUser && <Link to="/create-listing">+ Sell</Link>}
         {!currentUser && <Link to="/login">Login</Link>}
         {!currentUser && <Link to="/register">Register</Link>}
         {currentUser && <button onClick={logout}>Logout</button>}
