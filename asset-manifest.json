@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/roken/static/css/main.f5f3c6d0.css",
-    "main.js": "/roken/static/js/main.0016cccc.js",
+    "main.js": "/roken/static/js/main.df4a22de.js",
     "index.html": "/roken/index.html",
     "main.f5f3c6d0.css.map": "/roken/static/css/main.f5f3c6d0.css.map",
-    "main.0016cccc.js.map": "/roken/static/js/main.0016cccc.js.map"
+    "main.df4a22de.js.map": "/roken/static/js/main.df4a22de.js.map"
   },
   "entrypoints": [
     "static/css/main.f5f3c6d0.css",
-    "static/js/main.0016cccc.js"
+    "static/js/main.df4a22de.js"
   ]
 }
