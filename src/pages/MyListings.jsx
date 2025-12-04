@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../utils/firebase';
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc, query, where, orderBy } from 'firebase/firestore';
 import ListingCard from '../components/ListingCard';
 
 export default function MyListings() {
@@ -11,12 +11,19 @@ export default function MyListings() {
   useEffect(() => {
     const fetchMyListings = async () => {
       if (!currentUser) return;
-      const snapshot = await getDocs(collection(db, 'listings'));
-      const listings = snapshot.docs
-        .map(d => ({ id: d.id, ...d.data() }))
-        .filter(l => l.owner === currentUser.email);
+
+      // Query only listings created by the current user
+      const q = query(
+        collection(db, 'listings'),
+        where('userId', '==', currentUser.uid),
+        orderBy('datePosted', 'desc')
+      );
+
+      const snapshot = await getDocs(q);
+      const listings = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
       setMyListings(listings);
     };
+
     fetchMyListings();
   }, [currentUser]);
 
