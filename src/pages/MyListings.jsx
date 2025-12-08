@@ -1,3 +1,4 @@
+// src/pages/MyListings.jsx
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../utils/firebase';
@@ -12,35 +13,69 @@ export default function MyListings() {
     const fetchMyListings = async () => {
       if (!currentUser) return;
 
-      // Query only listings created by the current user
-      const q = query(
-        collection(db, 'listings'),
-        where('userId', '==', currentUser.uid),
-        orderBy('datePosted', 'desc')
-      );
+      try {
+        const q = query(
+          collection(db, 'listings'),
+          where('userId', '==', currentUser.uid),
+          orderBy('datePosted', 'desc')
+        );
 
-      const snapshot = await getDocs(q);
-      const listings = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      setMyListings(listings);
+        const snapshot = await getDocs(q);
+        const listings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setMyListings(listings);
+      } catch (error) {
+        console.error("Error fetching listings:", error);
+      }
     };
 
     fetchMyListings();
   }, [currentUser]);
 
   const handleDelete = async (id) => {
-    await deleteDoc(doc(db, 'listings', id));
-    setMyListings(prev => prev.filter(l => l.id !== id));
+    try {
+      await deleteDoc(doc(db, 'listings', id));
+      setMyListings(prev => prev.filter(l => l.id !== id));
+    } catch (error) {
+      console.error("Error deleting listing:", error);
+      alert("Failed to delete listing: " + error.message);
+    }
   };
 
   return (
-    <div className="my-listings-page">
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <h2>My Listings</h2>
       {myListings.length === 0 && <p>You have no listings yet.</p>}
-      <div className="listing-grid">
+
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+        gap: '20px'
+      }}>
         {myListings.map(listing => (
           <div key={listing.id}>
-            <ListingCard listing={listing} />
-            <button onClick={() => handleDelete(listing.id)}>Delete</button>
+            <ListingCard
+            listing={{
+             ...listing,
+             images: listing.images && listing.images.length > 0 ? listing.images : ['/default-image.png'],
+             location: listing.location || 'No location', // fallback
+             datePosted: listing.datePosted || null // fallback
+           }}
+        />
+
+            <button
+              onClick={() => handleDelete(listing.id)}
+              style={{
+                backgroundColor: 'red',
+                color: 'white',
+                padding: '5px 10px',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                marginTop: '5px'
+              }}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>

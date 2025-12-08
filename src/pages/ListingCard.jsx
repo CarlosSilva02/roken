@@ -1,21 +1,43 @@
-// src/components/ListingCard.jsx
 import React from 'react';
 
 export default function ListingCard({ listing }) {
+  const formattedDate = listing.datePosted?.seconds
+    ? new Date(listing.datePosted.seconds * 1000).toLocaleDateString()
+    : typeof listing.datePosted === 'string'
+      ? listing.datePosted
+      : "Unknown date";
+
+
   return (
-    <div className="listing-card">
-      {listing.images && listing.images[0] && (
-        <img
-          src={listing.images[0]}
-          alt={listing.title}
-          className="listing-image"
-        />
+    <div style={{
+      border: '1px solid #ccc',
+      borderRadius: '8px',
+      padding: '15px',
+      width: '250px',
+      margin: '10px',
+      textAlign: 'center',
+      boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+      fontFamily: 'Arial, sans-serif'
+    }}>
+      
+      {/* Image Gallery */}
+      {listing.images?.length > 0 ? (
+        <div style={{ display: 'flex', overflowX: 'auto', gap: '5px', marginBottom: '8px' }}>
+          {listing.images.map((img, idx) => (
+            <img key={idx} src={img} alt={`${listing.title} ${idx}`} 
+              style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '6px' }} />
+          ))}
+        </div>
+      ) : (
+        <div style={{ width: '100%', height: '150px', background: '#eee', borderRadius: '6px', marginBottom: '8px' }}>No Image</div>
       )}
-      <div className="listing-info">
-        <h3>{listing.title}</h3>
-        <p className="price">${listing.price}</p>
-        <p className="location">{listing.location}</p>
-      </div>
+
+      <h3>{listing.title || "No Title"}</h3>
+      <p>Price: ${listing.price || "0"}</p>
+      <p>Category: {listing.category || "N/A"}</p>
+      <p>Condition: {listing.condition || "N/A"}</p>
+      <p>Location: {listing.location || "N/A"}</p>
+      <p>Posted on: {formattedDate}</p>
     </div>
   );
 }
