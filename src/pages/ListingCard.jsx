@@ -1,12 +1,28 @@
 import React from 'react';
 
 export default function ListingCard({ listing }) {
-  const formattedDate = listing.datePosted?.seconds
-    ? new Date(listing.datePosted.seconds * 1000).toLocaleDateString()
-    : typeof listing.datePosted === 'string'
-      ? listing.datePosted
-      : "Unknown date";
+  const formattedDate = (() => {
+  const ts = listing.datePosted;
 
+  if (!ts) return "Unknown date";
+
+  // Normal Firebase Timestamp object (seconds + nanoseconds)
+  if (ts.seconds !== undefined) {
+    return new Date(ts.seconds * 1000).toLocaleDateString();
+  }
+
+  // Sometimes Firebase returns a plain object with _seconds (this happens in some v9 setups)
+  if (ts._seconds !== undefined) {
+    return new Date(ts._seconds * 1000).toLocaleDateString();
+  }
+
+  // Fallback – if it's already a Date or string
+  if (ts.toDate && typeof ts.toDate === 'function') {
+    return ts.toDate().toLocaleDateString();
+  }
+
+  return "Unknown date";
+})();
 
   return (
     <div style={{

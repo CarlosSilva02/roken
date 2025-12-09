@@ -52,32 +52,28 @@ export default function MyListings() {
         gap: '20px'
       }}>
         {myListings.map(listing => (
-          <div key={listing.id}>
-            <ListingCard
-            listing={{
-             ...listing,
-             images: listing.images && listing.images.length > 0 ? listing.images : ['/default-image.png'],
-             location: listing.location || 'No location', // fallback
-             datePosted: listing.datePosted || null // fallback
-           }}
-        />
+  <div key={listing.id}>
+    {}
+    <ListingCard listing={listing} />
+    {                   }
 
-            <button
-              onClick={() => handleDelete(listing.id)}
-              style={{
-                backgroundColor: 'red',
-                color: 'white',
-                padding: '5px 10px',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                marginTop: '5px'
-              }}
-            >
-              Delete
-            </button>
-          </div>
-        ))}
+    <button
+      onClick={() => handleDelete(listing.id)}
+      style={{
+        backgroundColor: 'red',
+        color: 'white',
+        padding: '8px 12px',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        marginTop: '10px',
+        width: '30%'
+      }}
+    >
+      Delete
+    </button>
+  </div>
+))}
       </div>
     </div>
   );
