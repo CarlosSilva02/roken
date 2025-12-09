@@ -51,29 +51,29 @@ export default function MyListings() {
         gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
         gap: '20px'
       }}>
-        {myListings.map(listing => (
-  <div key={listing.id}>
-    {}
-    <ListingCard listing={listing} />
-    {                   }
+                {myListings.map(listing => (
+          <div key={listing.id}>
+            {/* THIS RED BOX WILL SHOW US THE TRUTH */}
 
-    <button
-      onClick={() => handleDelete(listing.id)}
-      style={{
-        backgroundColor: 'red',
-        color: 'white',
-        padding: '8px 12px',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        marginTop: '10px',
-        width: '30%'
-      }}
-    >
-      Delete
-    </button>
-  </div>
-))}
+            <ListingCard listing={listing} />
+
+            <button
+              onClick={() => handleDelete(listing.id)}
+              style={{
+                backgroundColor: 'red',
+                color: 'white',
+                padding: '8px 12px',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                marginTop: '10px',
+                width: '100%'
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
