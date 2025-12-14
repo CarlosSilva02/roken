@@ -8,6 +8,8 @@ import Browse from './pages/Browse';
 import Login from './pages/login';
 import Register from './pages/Register';
 import MyListings from './pages/MyListings';
+import MessagesPage from './pages/MessagesPage';
+import ConversationPage from './pages/ConversationPage';
 import { AuthProvider } from './context/AuthContext';
 
 export default function App() {
@@ -22,6 +24,8 @@ export default function App() {
           <Route path="/mylistings" element={<MyListings />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/messages" element={<MessagesPage />} />
+          <Route path="/conversation/:id" element={<ConversationPage />} />
         </Routes>
         <Footer />
       </Router>

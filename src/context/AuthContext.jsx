@@ -1,33 +1,44 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, onAuthStateChanged, signOut } from 'firebase/auth';
-import { auth } from '../utils/firebase'; // import auth directly
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+  onAuthStateChanged,
+  signOut
+} from 'firebase/auth';
+import { auth } from '../utils/firebase'; 
 
-// Create context
 const AuthContext = createContext();
 
-// Hook to use auth context
+
 export const useAuth = () => useContext(AuthContext);
 
-// AuthProvider component
+
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Sign up with email & password
-  const signup = (email, password) =>
-    createUserWithEmailAndPassword(auth, email, password)
+  // Sign up with email & password only for  UTRGV students
+  const signup = (email, password) => {
+   
+    if (!email.endsWith('@utrgv.edu')) {
+      return Promise.reject(new Error('Only UTRGV school emails are allowed!'));
+    }
+
+    return createUserWithEmailAndPassword(auth, email, password)
       .then(userCredential => {
         sendEmailVerification(userCredential.user);
         return userCredential;
       });
+  };
 
-  // Login
+ 
   const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
 
-  // Logout
+ 
   const logout = () => signOut(auth);
 
-  // Listen for auth state changes
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
       setCurrentUser(user);
@@ -42,4 +53,3 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
-

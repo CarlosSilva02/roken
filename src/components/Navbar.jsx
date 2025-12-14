@@ -20,6 +20,9 @@ export default function Navbar() {
           {currentUser && (
             <Link to="/create-listing" className={isActive('/create-listing')}>➕ Sell</Link>
           )}
+          {currentUser && (
+            <Link to="/messages" className={isActive('/messages')}>💬 Messages</Link>
+          )}
           {!currentUser && <Link to="/login" className={isActive('/login')}>Login</Link>}
           {!currentUser && <Link to="/register" className={isActive('/register')}>Register</Link>}
           {currentUser && (
@@ -62,17 +65,17 @@ export default function Navbar() {
           transition: background 0.3s;
         }
         .nav-links a:hover, .nav-links button:hover {
-          background-color: #f08137c9; /* lighter orange on hover */
+          background-color: #f08137c9;
         }
         .nav-links a.active {
-          background-color: color: #FF6600; /* darker orange for active link */
+          background-color: #f08137c9;
         }
         .logout-btn {
-          background-color: #FF6600; /* green button for logout */
+          background-color: #FF6600;
           color: white;
         }
         .logout-btn:hover {
-          background-color: #FF6600; /* slightly darker green */
+          background-color: #f08137c9;
         }
       `}</style>
     </>
