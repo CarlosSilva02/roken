@@ -2,25 +2,34 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-export default function Signup() {
+export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { signup } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Restrict to school emails
+    // Restrict to UTRGV emails
     if (!email.endsWith('@utrgv.edu')) {
       setError('Only UTRGV school emails are allowed!');
       return;
     }
 
     try {
-      await signup(email, password);
-      navigate('/'); // redirect after successful signup
+      const userCredential = await login(email, password);
+
+      // Check if email is verified
+      if (!userCredential.user.emailVerified) {
+        setError('Please verify your email before logging in.');
+        return;
+      }
+
+      
+      setError('');
+      navigate('/');
     } catch (err) {
       setError(err.message);
     }
@@ -28,7 +37,7 @@ export default function Signup() {
 
   return (
     <div className="form-container">
-      <h2>Sign Up</h2>
+      <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -44,7 +53,7 @@ export default function Signup() {
           required
           onChange={e => setPassword(e.target.value)}
         />
-        <button type="submit">Sign Up</button>
+        <button type="submit">Login</button>
       </form>
       {error && <p className="error">{error}</p>}
     </div>
