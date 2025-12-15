@@ -70,13 +70,13 @@ export default function CreateListing() {
   const groupedCategories = [
     { label: "Academic Supplies", options: ["Textbooks (new & used)","Notebooks, binders, folders","Stationery (pens, pencils, markers)","Lab equipment / calculators","Art supplies"] },
     { label: "Electronics & Tech", options: ["Laptops / tablets / chargers","Headphones / earbuds","Smartwatches / fitness trackers","Software / apps licenses"] },
-    { label: "Clothing & Apparel", options: ["School uniforms","Sportswear / team jerseys","Shoes / sneakers","Jackets / hoodies"] },
+    { label: "Clothing & Apparel", options: ["Sportswear / team jerseys","Shoes / sneakers","Jackets / hoodies"] },
     { label: "Dorm & Room Essentials", options: ["Bedding / pillows / blankets","Desks / chairs / lamps","Storage organizers / shelves","Kitchen gadgets for dorms"] },
     { label: "Sports & Fitness", options: ["Balls, rackets, and other gear","Gym equipment / yoga mats","Bicycles / scooters / skateboards"] },
     { label: "Hobbies & Entertainment", options: ["Board games / puzzles","Musical instruments / sheet music","Books / comics / manga","Video games / consoles"] },
     { label: "Transportation", options: ["Bicycles / skateboards / scooters"] },
-    { label: "Services (Optional)", options: ["Tutoring","Study guides / notes"] },
-    { label: "Miscellaneous / Free Items", options: ["Freebies / giveaways","Lost & found","Swap/trade items"] }
+    { label: "Services", options: ["Tutoring","Study guides / notes"] },
+    { label: "Miscellaneous / Free Items", options: ["Freebies / giveaways","Lost & found","Swap/trade items","Other"] }
   ];
 
   const conditionOptions = ["New", "Like New", "Good", "Fair"];

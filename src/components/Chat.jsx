@@ -11,7 +11,7 @@ export default function Chat({ listing, onClose }) {
 
   if (!currentUser) return null;
 
-  // Unique conversation ID shared by buyer and seller
+ 
   const conversationId = [listing.id, currentUser.uid, listing.userId].sort().join('_');
 
   const requestToBuy = async () => {
