@@ -49,51 +49,64 @@ export default function ConversationPage() {
   }, [id, currentUser]);
 
   
-  const sendMessage = async (e) => {
-    e.preventDefault();
-    if (!newMessage.trim() || !currentUser) return;
+const sendMessage = async (e) => {
+  e.preventDefault();
+  if (!newMessage.trim() || !currentUser) return;
 
-    const convRef = doc(db, 'conversations', id);
-    const convSnap = await getDoc(convRef);
+  const convRef = doc(db, 'conversations', id);
+  const convSnap = await getDoc(convRef);
 
-    if (!convSnap.exists()) {
-      await setDoc(convRef, { updatedAt: serverTimestamp() }, { merge: true });
-    }
+  if (!convSnap.exists()) {
+    await setDoc(convRef, { updatedAt: serverTimestamp() }, { merge: true });
+  }
 
-    await addDoc(collection(db, 'conversations', id, 'messages'), {
-      text: newMessage,
-      senderId: currentUser.uid,
-      senderEmail: currentUser.email,
-      timestamp: serverTimestamp()
-    });
+  // 1️⃣ Add message to subcollection
+  await addDoc(collection(db, 'conversations', id, 'messages'), {
+    text: newMessage,
+    senderId: currentUser.uid,
+    senderEmail: currentUser.email,   // store email per message
+    timestamp: serverTimestamp()
+  });
 
-    await setDoc(convRef, { lastMessage: newMessage, updatedAt: serverTimestamp() }, { merge: true });
-    setNewMessage('');
-  };
+  // 2️⃣ Update conversation doc with lastMessage info
+  await setDoc(convRef, {
+    lastMessage: newMessage,
+    lastMessageEmail: currentUser.email,  // add this line
+    updatedAt: serverTimestamp()
+  }, { merge: true });
+
+  setNewMessage('');
+};
+
 
   
   const requestToBuy = async () => {
-    if (!currentUser || !conversation) return;
+  if (!currentUser || !conversation) return;
 
-    const price = prompt('Enter the price you want to offer:');
-    if (!price || isNaN(price)) return;
+  const price = prompt('Enter the price you want to offer:');
+  if (!price || isNaN(price)) return;
 
-    const convRef = doc(db, 'conversations', id);
+  const convRef = doc(db, 'conversations', id);
 
-    const messageText = `💰 Purchase request: $${price}`;
+  const messageText = `💰 Purchase request: $${price}`;
 
-    await addDoc(collection(db, 'conversations', id, 'messages'), {
-      text: messageText,
-      senderId: currentUser.uid,
-      senderEmail: currentUser.email,
-      timestamp: serverTimestamp(),
-      isRequest: true,
-      status: 'pending',
-      requestedPrice: parseFloat(price)
-    });
+  await addDoc(collection(db, 'conversations', id, 'messages'), {
+    text: messageText,
+    senderId: currentUser.uid,
+    senderEmail: currentUser.email,  // store email per message
+    timestamp: serverTimestamp(),
+    isRequest: true,
+    status: 'pending',
+    requestedPrice: parseFloat(price)
+  });
 
-    await setDoc(convRef, { lastMessage: messageText, updatedAt: serverTimestamp() }, { merge: true });
-  };
+  await setDoc(convRef, {
+    lastMessage: messageText,
+    lastMessageEmail: currentUser.email,  // add this line
+    updatedAt: serverTimestamp()
+  }, { merge: true });
+};
+
 
   
   const handleRequestResponse = async (msgId, accept) => {

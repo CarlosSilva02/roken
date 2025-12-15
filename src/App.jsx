@@ -10,6 +10,8 @@ import Register from './pages/Register';
 import MyListings from './pages/MyListings';
 import MessagesPage from './pages/MessagesPage';
 import ConversationPage from './pages/ConversationPage';
+import ServicesPage from './pages/CreateService';
+import Profile from './pages/Profile';
 import { AuthProvider } from './context/AuthContext';
 
 export default function App() {
@@ -20,12 +22,14 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/browse" element={<Browse />} />
+          <Route path="/services" element={<ServicesPage />} /> 
           <Route path="/create-listing" element={<CreateListing />} />
           <Route path="/mylistings" element={<MyListings />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/messages" element={<MessagesPage />} />
           <Route path="/conversation/:id" element={<ConversationPage />} />
+          <Route path="/profile" element={<Profile />} /> {}
         </Routes>
         <Footer />
       </Router>

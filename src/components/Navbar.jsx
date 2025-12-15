@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
-  const { currentUser, logout } = useAuth();
+  const { currentUser } = useAuth(); // removed logout
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path ? 'active' : '';
@@ -14,6 +14,7 @@ export default function Navbar() {
         <Link to="/" className="logo">Roken</Link>
         <div className="nav-links">
           <Link to="/browse" className={isActive('/browse')}>🛒 Browse</Link>
+          <Link to="/services" className={isActive('/services')}>🛠️ Services</Link>
           {currentUser && (
             <Link to="/mylistings" className={isActive('/mylistings')}>👤 My Listings</Link>
           )}
@@ -26,7 +27,7 @@ export default function Navbar() {
           {!currentUser && <Link to="/login" className={isActive('/login')}>Login</Link>}
           {!currentUser && <Link to="/register" className={isActive('/register')}>Register</Link>}
           {currentUser && (
-            <button className="logout-btn" onClick={logout}>🚪 Logout</button>
+            <Link to="/profile" className={isActive('/profile')}>👤 Profile</Link>
           )}
         </div>
       </nav>
@@ -68,13 +69,6 @@ export default function Navbar() {
           background-color: #f08137c9;
         }
         .nav-links a.active {
-          background-color: #f08137c9;
-        }
-        .logout-btn {
-          background-color: #FF6600;
-          color: white;
-        }
-        .logout-btn:hover {
           background-color: #f08137c9;
         }
       `}</style>

@@ -1,4 +1,3 @@
-// /Browse.jsx
 import React, { useEffect, useState } from 'react';
 import { db } from '../utils/firebase';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
@@ -12,7 +11,7 @@ const groupedCategories = [
   { label: "Sports & Fitness", options: ["Balls, rackets, and other gear","Gym equipment / yoga mats","Bicycles / scooters / skateboards"] },
   { label: "Hobbies & Entertainment", options: ["Board games / puzzles","Musical instruments / sheet music","Books / comics / manga","Video games / consoles"] },
   { label: "Transportation", options: ["Bicycles / skateboards / scooters"] },
-  { label: "Services", options: ["Tutoring","Study guides / notes"] },
+  { label: "Services", options: ["Tutoring", "Resume & Portfolio Help", "Interview Coaching", "Essay & Paper Review", "Car Wash"] },
   { label: "Miscellaneous / Free Items", options: ["Freebies / giveaways","Lost & found","Swap/trade items","Other"] }
 ];
 
@@ -23,20 +22,14 @@ export default function Browse() {
 
   useEffect(() => {
     const q = query(collection(db, 'listings'), orderBy('datePosted', 'desc'));
-
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setListings(data);
       setLoading(false);
     });
-
     return unsubscribe;
   }, []);
 
- 
   const filteredListings = selectedCategory
     ? listings.filter(listing => listing.category === selectedCategory)
     : listings;
@@ -50,23 +43,12 @@ export default function Browse() {
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          style={{
-            padding: '10px',
-            width: '320px',
-            maxWidth: '90%',
-            borderRadius: '5px',
-            border: '1px solid #ccc'
-          }}
+          style={{ padding: '10px', width: '320px', maxWidth: '90%', borderRadius: '5px', border: '1px solid #ccc' }}
         >
           <option value="">Search for Categories</option>
-
           {groupedCategories.map(group => (
             <optgroup key={group.label} label={group.label}>
-              {group.options.map(option => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
+              {group.options.map(option => <option key={option} value={option}>{option}</option>)}
             </optgroup>
           ))}
         </select>
@@ -76,18 +58,8 @@ export default function Browse() {
       {filteredListings.length === 0 ? (
         <p style={{ textAlign: 'center' }}>No listings found.</p>
       ) : (
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: '20px',
-            padding: '20px'
-          }}
-        >
-          {filteredListings.map(listing => (
-            <ListingCard key={listing.id} listing={listing} />
-          ))}
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', padding: '20px' }}>
+          {filteredListings.map(listing => <ListingCard key={listing.id} listing={listing} />)}
         </div>
       )}
     </div>

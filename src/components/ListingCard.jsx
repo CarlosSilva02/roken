@@ -23,11 +23,14 @@ export default function ListingCard({ listing }) {
       alert("Please log in to request a purchase.");
       return;
     }
+    if (listing.sold) {
+      alert("This listing is sold!");
+      return;
+    }
 
     const conversationId = [listing.id, currentUser.uid, listing.userId].sort().join('_');
     const conversationRef = doc(db, 'conversations', conversationId);
 
-    // Create conversation if it doesn't exist yet
     await setDoc(
       conversationRef,
       {
@@ -45,6 +48,21 @@ export default function ListingCard({ listing }) {
     navigate(`/conversation/${conversationId}`);
   };
 
+  const markAsSold = async () => {
+    if (!currentUser || currentUser.uid !== listing.userId) return;
+    const listingRef = doc(db, 'listings', listing.id);
+    await setDoc(listingRef, { sold: true }, { merge: true });
+    alert("Marked as SOLD!");
+  };
+
+  // New function to revert / unsell
+  const revertSale = async () => {
+    if (!currentUser || currentUser.uid !== listing.userId) return;
+    const listingRef = doc(db, 'listings', listing.id);
+    await setDoc(listingRef, { sold: false }, { merge: true });
+    alert("Listing is now available again!");
+  };
+
   return (
     <div style={{
       border: '1px solid #ccc',
@@ -54,9 +72,9 @@ export default function ListingCard({ listing }) {
       margin: '10px',
       textAlign: 'center',
       boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-      fontFamily: 'Arial, sans-serif'
+      fontFamily: 'Arial, sans-serif',
+      position: 'relative'
     }}>
-      {/* Images */}
       {listing.images?.length > 0 ? (
         <div style={{ display: 'flex', overflowX: 'auto', gap: '5px', marginBottom: '8px' }}>
           {listing.images.map((img, idx) => (
@@ -71,12 +89,26 @@ export default function ListingCard({ listing }) {
       <h3>{listing.title || "No Title"}</h3>
       <p style={{fontSize: '18px', fontWeight: 'bold', color: '#FF6600'}}>${listing.price || "0"}</p>
       <p>Category: {listing.category || "N/A"}</p>
-      <p>Condition: {listing.condition || "N/A"}</p>
+      {listing.type !== "service" && <p>Condition: {listing.condition || "N/A"}</p>}
       <p>Location: {listing.location || "N/A"}</p>
       <p style={{fontSize: '12px', color: '#666'}}>Posted on: {formattedDate}</p>
 
+      {/* Show SOLD badge if sold */}
+      {listing.sold && (
+        <div style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          backgroundColor: '#FF4444',
+          color: 'white',
+          padding: '5px 8px',
+          borderRadius: '4px',
+          fontWeight: 'bold'
+        }}>SOLD</div>
+      )}
+
       {/* Request to Buy Button */}
-      {currentUser && listing.userId !== currentUser.uid && (
+      {currentUser && !listing.sold && listing.userId !== currentUser.uid && (
         <button
           onClick={handleRequestToBuy}
           style={{
@@ -91,6 +123,44 @@ export default function ListingCard({ listing }) {
           }}
         >
           Request to Buy
+        </button>
+      )}
+
+      {}
+      {currentUser && listing.userId === currentUser.uid && !listing.sold && (
+        <button
+          onClick={markAsSold}
+          style={{
+            width: '100%',
+            padding: '10px',
+            backgroundColor: '#FF6600',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            fontWeight: 'bold',
+            marginTop: '10px'
+          }}
+        >
+          Mark as Sold
+        </button>
+      )}
+
+      {}
+      {currentUser && listing.userId === currentUser.uid && listing.sold && (
+        <button
+          onClick={revertSale}
+          style={{
+            width: '100%',
+            padding: '10px',
+            backgroundColor: '#FF3300',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            fontWeight: 'bold',
+            marginTop: '10px'
+          }}
+        >
+          Revert / Unsell
         </button>
       )}
     </div>

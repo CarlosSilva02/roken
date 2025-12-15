@@ -1,8 +1,8 @@
-// src/components/MessagesPage.jsx
+// src/pages/MessagesPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../utils/firebase';
-import { collection, onSnapshot, query, orderBy,} from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 
 export default function MessagesPage() {
@@ -52,8 +52,15 @@ export default function MessagesPage() {
         >
           <strong>{conv.listingTitle}</strong>
           <p>{conv.lastMessage}</p>
+          <p style={{ fontSize: '12px', color: '#666' }}>
+            From: {conv.lastMessageEmail || 'Unknown'} |{' '}
+            {conv.lastMessageTime
+              ? new Date(conv.lastMessageTime.seconds * 1000).toLocaleString()
+              : ''}
+          </p>
         </Link>
       ))}
     </div>
   );
 }
+
