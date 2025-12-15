@@ -51,10 +51,19 @@ export default function MyListings() {
         gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
         gap: '20px'
       }}>
-                {myListings.map(listing => (
-          <div key={listing.id}>
-            {/* THIS RED BOX WILL SHOW US THE TRUTH */}
-
+        {myListings.map(listing => (
+          <div 
+            key={listing.id} 
+            style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              boxSizing: 'border-box',
+              backgroundColor: '#f9f9f9',
+              padding: '10px',
+              borderRadius: '8px',
+              boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+            }}
+          >
             <ListingCard listing={listing} />
 
             <button
